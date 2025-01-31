@@ -60,6 +60,7 @@ public class REST_RequestService
     {
         return ExecuteRequestSync<T>(requestName, requestType, requestBody, null, null, args);
     }
+
     /// <summary>
     /// Execute a sync REST Request basing on a JSON configuration file passing parameters and args.
     /// </summary>
