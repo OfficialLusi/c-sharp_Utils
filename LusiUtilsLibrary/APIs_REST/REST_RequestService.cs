@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
 
 namespace LusiUtilsLibrary.APIs_REST;
 
@@ -105,24 +103,9 @@ public class REST_RequestService
     /// <param name="args">Optional arguments to add to url</param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public T ExecuteRequestSync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string> parameters, double? timeout, params string[] args)
+    public T ExecuteRequestSync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string>? parameters, double? timeout, params string[] args)
     {
-        dynamic routes = _routesConfig["HttpConfig"]["routes"];
-        dynamic route = null;
-
-        foreach (var r in routes)
-        {
-            if (r["RequestName"].ToString() == requestName)
-            {
-                route = r;
-                break;
-            }
-        }
-
-        if (route == null)
-            throw new ArgumentOutOfRangeException(nameof(requestName), $"RequestName {requestName} not found in route table");
-
-        string url = route["UrlName"].ToString();
+        string url = GetBaseUrl(requestName);
 
         if (parameters != null)
         {
@@ -205,22 +188,7 @@ public class REST_RequestService
     /// <exception cref="Exception">If http request fails.</exception>
     public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string> parameters, double? timeout, params string[] args)
     {
-        dynamic routes = _routesConfig["HttpConfig"]["routes"];
-        dynamic route = null;
-
-        foreach (var r in routes)
-        {
-            if (r["RequestName"].ToString() == requestName)
-            {
-                route = r;
-                break;
-            }
-        }
-
-        if (route == null)
-            throw new ArgumentOutOfRangeException(nameof(requestName), $"RequestName {requestName} not found in route table");
-
-        string url = route["UrlName"].ToString();
+        string url = GetBaseUrl(requestName);
 
         if (parameters != null)
         {
@@ -305,6 +273,26 @@ public class REST_RequestService
         return requestBody != null
             ? new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json")
             : null;
+    }
+
+    private string GetBaseUrl(string requestName)
+    {
+        dynamic routes = _routesConfig["HttpConfig"]["routes"];
+        dynamic route = null;
+
+        foreach (var r in routes)
+        {
+            if (r["RequestName"].ToString() == requestName)
+            {
+                route = r;
+                break;
+            }
+        }
+
+        if (route == null)
+            throw new ArgumentOutOfRangeException(nameof(requestName), $"RequestName {requestName} not found in route table");
+
+        return route["UrlName"].ToString();
     }
 
     #endregion
