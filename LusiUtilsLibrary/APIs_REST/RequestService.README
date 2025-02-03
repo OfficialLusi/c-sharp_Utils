@@ -1,0 +1,41 @@
+REST_RequestService
+
+private fields: 
+  _httpClient -> HttpClient instance to send HTTP requests to RESTfull web services and receive a response
+  _routesConfig -> dynamic object instance to deserialize json config file of requests name and url
+  _logger -> ILogger<REST_RequestService> instance to log messages
+
+constructor:
+  public REST_RequestService(ILogger<REST_RequestService> logger, string settingsPath = "communicationsettings.json")
+  - receive a logger instance from the DI container to set _logger instance
+  - calls LoadRoutesConfig(settingsPath) to deserialize configuration file into _routesConfig
+  - create an instance of HttpClient
+
+public methods:
+  sync:
+    - public T ExecuteRequestSync<T>(string requestName, RequestType requestType, object requestBody, params string[] args)
+    - public T ExecuteRequestSync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string> parameters, params string[] args)
+    - public T ExecuteRequestSync<T>(string requestName, RequestType requestType, object requestBody, double timeout, params string[] args)
+    These three methods call the only implemented, full method:
+    - public T ExecuteRequestSync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string>? parameters, double? timeout, params string[] args)
+      - build the base url from the config json file using request name
+      - if parameters or args are not null, they'll get add to the url
+      - calling the SendRequestSync<T>(url, requestType, requestBody, timeout)
+    - private T SendRequestSync<T>(string url, RequestType requestType, object requestBody, double? timeout = null)
+      - set a timeout value if not null, else it remains standard
+      - calls the correct request type (GET, POST, PUT, DELETE)
+      - ensure the success of the call
+      - returns the deserialized response
+  Async:
+    - The same as sync but with async await logic
+
+private helpers:
+  - private dynamic LoadRoutesConfig(string settingsPath)
+    - receive a settingsPath and deserialize the content
+  - private HttpContent? CreateHttpContent(object requestBody)
+    - receive the request body, if not null, encodes and serializes it
+  - private string GetBaseUrl(string requestName)
+    - get the requestName and return the correct url from the config json file
+
+enum:
+  - enum with request types
