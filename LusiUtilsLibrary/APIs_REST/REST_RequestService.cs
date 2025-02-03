@@ -224,8 +224,7 @@ public class REST_RequestService
             _ => throw new ArgumentOutOfRangeException(nameof(requestType), "Invalid request type"),
         };
 
-        if (!response.IsSuccessStatusCode)
-            throw new Exception($"HTTP Request failed with status code {response.StatusCode}");
+        response.EnsureSuccessStatusCode();
 
         string responseContent = response.Content.ReadAsStringAsync().Result;
         return JsonSerializer.Deserialize<T>(responseContent);
@@ -248,8 +247,8 @@ public class REST_RequestService
             RequestType.DELETE => await _httpClient.DeleteAsync(url),
             _ => throw new ArgumentOutOfRangeException(nameof(requestType), "Invalid request type"),
         };
-        if (!response.IsSuccessStatusCode)
-            throw new Exception($"HTTP Request failed with status code {response.StatusCode}");
+
+        response.EnsureSuccessStatusCode();
 
         string responseContent = await response.Content.ReadAsStringAsync();
         return JsonSerializer.Deserialize<T>(responseContent);
