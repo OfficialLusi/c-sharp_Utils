@@ -124,7 +124,7 @@ public class REST_RequestService : IREST_RequestService
     #region Async
 
     /// <summary>
-    /// Execute a sync REST Request basing on a JSON configuration file.
+    /// Execute an async REST Request basing on a JSON configuration file.
     /// </summary>
     /// <typeparam name="T">Data type attended from the request.</typeparam>
     /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
@@ -140,7 +140,7 @@ public class REST_RequestService : IREST_RequestService
     }
 
     /// <summary>
-    /// Execute a sync REST Request basing on a JSON configuration file.
+    /// Execute an async REST Request basing on a JSON configuration file.
     /// </summary>
     /// <typeparam name="T">Data type attended from the request.</typeparam>
     /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
@@ -157,7 +157,7 @@ public class REST_RequestService : IREST_RequestService
     }
 
     /// <summary>
-    /// Execute a sync REST Request basing on a JSON configuration file.
+    /// Execute an async REST Request basing on a JSON configuration file.
     /// </summary>
     /// <typeparam name="T">Data type attended from the request.</typeparam>
     /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
@@ -174,7 +174,7 @@ public class REST_RequestService : IREST_RequestService
     }
 
     /// <summary>
-    /// Execute a sync REST Request basing on a JSON configuration file.
+    /// Execute an async REST Request basing on a JSON configuration file.
     /// </summary>
     /// <typeparam name="T">Data type attended from the request.</typeparam>
     /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
