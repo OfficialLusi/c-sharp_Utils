@@ -1,4 +1,4 @@
-﻿namespace LusiUtilsLibrary.APIs_REST;
+﻿namespace LusiUtilsLibrary.Backend.APIs_REST;
 
 public enum RequestType
 {

@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json;
 
-namespace LusiUtilsLibrary.APIs_REST;
+namespace LusiUtilsLibrary.Backend.APIs_REST;
 
 /// <summary>
 /// Passing the file name for the correct configuration of apis
