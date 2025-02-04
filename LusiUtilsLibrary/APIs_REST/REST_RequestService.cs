@@ -17,7 +17,7 @@ namespace LusiUtilsLibrary.APIs_REST;
 ///   }
 /// }
 /// </summary>
-public class REST_RequestService
+public class REST_RequestService : IREST_RequestService
 {
     #region private fields
     private readonly HttpClient _httpClient;
@@ -260,14 +260,14 @@ public class REST_RequestService
 
     #region private helpers
 
-    private dynamic LoadRoutesConfig(string settingsPath)
+    private static dynamic LoadRoutesConfig(string settingsPath)
     {
         if (!File.Exists(settingsPath))
             throw new FileNotFoundException($"Configuration file {settingsPath} not found.");
         return JsonSerializer.Deserialize<dynamic>(File.ReadAllText(settingsPath));
     }
 
-    private HttpContent? CreateHttpContent(object requestBody)
+    private static HttpContent? CreateHttpContent(object requestBody)
     {
         return requestBody != null
             ? new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json")
@@ -294,15 +294,5 @@ public class REST_RequestService
         return route["UrlName"].ToString();
     }
 
-    #endregion
-
-    #region enum
-    public enum RequestType
-    {
-        GET,
-        POST,
-        PUT,
-        DELETE
-    }
     #endregion
 }
