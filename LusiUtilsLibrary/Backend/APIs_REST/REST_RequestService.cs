@@ -162,7 +162,13 @@ public class REST_RequestService : IREST_RequestService
         response.EnsureSuccessStatusCode();
 
         string responseContent = await response.Content.ReadAsStringAsync();
-        return JsonSerializer.Deserialize<T>(responseContent);
+
+        JsonSerializerOptions options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        };
+
+        return JsonSerializer.Deserialize<T>(responseContent, options);
     }
 
     #endregion
