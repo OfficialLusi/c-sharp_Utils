@@ -41,88 +41,6 @@ public class REST_RequestService : IREST_RequestService
 
     #region public methods
 
-    #region Sync
-
-    /// <summary>
-    /// Execute a sync REST Request basing on a JSON configuration file passing only args.
-    /// </summary>
-    /// <typeparam name="T">Data type attended from the request.</typeparam>
-    /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
-    /// <param name="requestType">Request type (GET, POST, PUT, DELETE).</param>
-    /// <param name="requestBody">Request body (if not null).</param>
-    /// <param name="args">Optional arguments to add to url</param>
-    /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
-    /// <exception cref="Exception">If http request fails.</exception>
-    public T ExecuteRequestSync<T>(string requestName, RequestType requestType, object requestBody, params string[] args)
-    {
-        return ExecuteRequestSync<T>(requestName, requestType, requestBody, null, null, args);
-    }
-
-    /// <summary>
-    /// Execute a sync REST Request basing on a JSON configuration file passing parameters and args.
-    /// </summary>
-    /// <typeparam name="T">Data type attended from the request.</typeparam>
-    /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
-    /// <param name="requestType">Request type (GET, POST, PUT, DELETE).</param>
-    /// <param name="requestBody">Request body (if not null).</param>
-    /// <param name="parameters">Parameters to add to the url</param>
-    /// <param name="args">Optional arguments to add to url</param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public T ExecuteRequestSync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string> parameters, params string[] args)
-    {
-        return ExecuteRequestSync<T>(requestName, requestType, requestBody, parameters, null, args);
-    }
-
-    /// <summary>
-    /// Execute a sync REST Request basing on a JSON configuration file passing timeout and args.
-    /// </summary>
-    /// <typeparam name="T">Data type attended from the request.</typeparam>
-    /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
-    /// <param name="requestType">Request type (GET, POST, PUT, DELETE).</param>
-    /// <param name="requestBody">Request body (if not null).</param>
-    /// <param name="timeout">Timeout for the request</param>
-    /// <param name="args">Optional arguments to add to url</param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public T ExecuteRequestSync<T>(string requestName, RequestType requestType, object requestBody, double timeout, params string[] args)
-    {
-        return ExecuteRequestSync<T>(requestName, requestType, requestBody, null, timeout, args);
-    }
-
-    /// <summary>
-    /// Execute a sync REST Request basing on a JSON configuration file passing parameters, timeout and args.
-    /// </summary>
-    /// <typeparam name="T">Data type attended from the request.</typeparam>
-    /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
-    /// <param name="requestType">Request type (GET, POST, PUT, DELETE).</param>
-    /// <param name="requestBody">Request body (if not null).</param>
-    /// <param name="parameters">Optional parameters to add to the url</param>
-    /// <param name="timeout">Timeout for the request</param>
-    /// <param name="args">Optional arguments to add to url</param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
-    public T ExecuteRequestSync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string>? parameters, double? timeout, params string[] args)
-    {
-        string url = GetBaseUrl(requestName);
-
-        if (parameters != null)
-        {
-            foreach (var param in parameters)
-                url = url.Replace($"{{{param.Key}}}", param.Value);
-        }
-
-        if (args != null && args.Length > 0)
-            url = string.Format(url, args);
-
-        return SendRequestSync<T>(url, requestType, requestBody, timeout);
-    }
-
-    #endregion
-
-    #region Async
-
     /// <summary>
     /// Execute an async REST Request basing on a JSON configuration file.
     /// </summary>
@@ -134,7 +52,7 @@ public class REST_RequestService : IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, params string[] args)
+    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, params string[] args)
     {
         return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, null, null, args);
     }
@@ -151,7 +69,7 @@ public class REST_RequestService : IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string> parameters, params string[] args)
+    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, Dictionary<string, string> parameters, params string[] args)
     {
         return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, parameters, null, args);
     }
@@ -168,7 +86,7 @@ public class REST_RequestService : IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, double timeout, params string[] args)
+    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, double timeout, params string[] args)
     {
         return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, null, timeout, args);
     }
@@ -186,7 +104,7 @@ public class REST_RequestService : IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string> parameters, double? timeout, params string[] args)
+    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, Dictionary<string, string> parameters, double? timeout, params string[] args)
     {
         string url = GetBaseUrl(requestName);
 
@@ -204,48 +122,41 @@ public class REST_RequestService : IREST_RequestService
 
     #endregion
 
-    #endregion
-
     #region private methods
 
-    #region Sync
-
-    private T SendRequestSync<T>(string url, RequestType requestType, object requestBody, double? timeout = null)
+    private async Task<T> SendRequestAsync<T>(string url, RequestType requestType, object? requestBody, double? timeout = null)
     {
         if (timeout.HasValue)
             _httpClient.Timeout = TimeSpan.FromSeconds(timeout.Value);
 
-        HttpResponseMessage response = requestType switch
+        HttpResponseMessage response = null;
+
+        switch (requestType)
         {
-            RequestType.GET => _httpClient.GetAsync(url).Result,
-            RequestType.POST => _httpClient.PostAsync(url, CreateHttpContent(requestBody)).Result,
-            RequestType.PUT => _httpClient.PutAsync(url, CreateHttpContent(requestBody)).Result,
-            RequestType.DELETE => _httpClient.DeleteAsync(url).Result,
-            _ => throw new ArgumentOutOfRangeException(nameof(requestType), "Invalid request type"),
-        };
-
-        response.EnsureSuccessStatusCode();
-
-        string responseContent = response.Content.ReadAsStringAsync().Result;
-        return JsonSerializer.Deserialize<T>(responseContent);
-    }
-
-    #endregion
-
-    #region Async
-
-    private async Task<T> SendRequestAsync<T>(string url, RequestType requestType, object requestBody, double? timeout = null)
-    {
-        if (timeout.HasValue)
-            _httpClient.Timeout = TimeSpan.FromSeconds(timeout.Value);
-
-        HttpResponseMessage response = requestType switch
-        {
-            RequestType.GET => await _httpClient.GetAsync(url),
-            RequestType.POST => await _httpClient.PostAsync(url, CreateHttpContent(requestBody)),
-            RequestType.PUT => await _httpClient.PutAsync(url, CreateHttpContent(requestBody)),
-            RequestType.DELETE => await _httpClient.DeleteAsync(url),
-            _ => throw new ArgumentOutOfRangeException(nameof(requestType), "Invalid request type"),
+            case RequestType.GET:
+                {
+                    response = await _httpClient.GetAsync(url);
+                    break;
+                }
+            case RequestType.POST:
+                {
+                    response = await _httpClient.PostAsync(url, CreateHttpContent(requestBody));
+                    break;
+                }
+            case RequestType.PUT:
+                {
+                    response = await _httpClient.PutAsync(url, CreateHttpContent(requestBody));
+                    break;
+                }
+            case RequestType.DELETE:
+                {
+                    response = await _httpClient.DeleteAsync(url);
+                    break;
+                }
+            default:
+                {
+                    throw new ArgumentOutOfRangeException(nameof(requestType), "Invalid request type");
+                }
         };
 
         response.EnsureSuccessStatusCode();
@@ -253,8 +164,6 @@ public class REST_RequestService : IREST_RequestService
         string responseContent = await response.Content.ReadAsStringAsync();
         return JsonSerializer.Deserialize<T>(responseContent);
     }
-
-    #endregion
 
     #endregion
 
