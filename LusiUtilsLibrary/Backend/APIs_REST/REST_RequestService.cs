@@ -7,11 +7,11 @@ namespace LusiUtilsLibrary.Backend.APIs_REST;
 /// <summary>
 /// Passing the file name for the correct configuration of apis
 /// {
-///   "HTTPConfig": {
+///   "httpconfig": {
 ///     "routes": [
 ///       {
-///         "RequestName": "requestName",
-///         "URLName": "url"
+///         "requestname": "requestName",
+///         "urlname": "url"
 ///       }
 ///     ]
 ///   }
@@ -276,22 +276,18 @@ public class REST_RequestService : IREST_RequestService
 
     private string GetBaseUrl(string requestName)
     {
-        dynamic routes = _routesConfig["HttpConfig"]["routes"];
-        dynamic route = null;
+        dynamic httpConfig = _routesConfig.GetProperty("httpconfig");
+        dynamic routes = httpConfig.GetProperty("routes");
 
-        foreach (var r in routes)
+        foreach (dynamic r in routes.EnumerateArray())
         {
-            if (r["RequestName"].ToString() == requestName)
+            if (r.GetProperty("requestname").GetString() == requestName)
             {
-                route = r;
-                break;
+                return r.GetProperty("urlname").GetString();
             }
         }
 
-        if (route == null)
-            throw new ArgumentOutOfRangeException(nameof(requestName), $"RequestName {requestName} not found in route table");
-
-        return route["UrlName"].ToString();
+        throw new ArgumentOutOfRangeException(nameof(requestName), $"RequestName {requestName} not found in route table");
     }
 
     #endregion

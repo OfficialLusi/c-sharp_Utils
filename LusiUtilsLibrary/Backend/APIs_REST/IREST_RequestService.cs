@@ -3,11 +3,11 @@
 /// <summary>
 /// Passing the file name for the correct configuration of apis
 /// {
-///   "HTTPConfig": {
+///   "httpconfig": {
 ///     "routes": [
 ///       {
-///         "RequestName": "requestName",
-///         "URLName": "url"
+///         "requestname": "requestName",
+///         "urlname": "url"
 ///       }
 ///     ]
 ///   }
