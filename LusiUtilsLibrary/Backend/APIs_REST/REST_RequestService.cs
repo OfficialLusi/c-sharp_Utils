@@ -110,7 +110,7 @@ public class REST_RequestService : IREST_RequestService
 
         if (parameters != null)
         {
-            foreach (var param in parameters)
+            foreach (KeyValuePair<string, string> param in parameters)
                 url = url.Replace($"{{{param.Key}}}", param.Value);
         }
 
