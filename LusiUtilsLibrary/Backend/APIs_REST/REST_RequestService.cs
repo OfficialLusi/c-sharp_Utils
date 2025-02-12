@@ -48,13 +48,28 @@ public class REST_RequestService : IREST_RequestService
     /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
     /// <param name="requestType">Request type (GET, POST, PUT, DELETE).</param>
     /// <param name="requestBody">Request body (if not null).</param>
+    /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
+    /// <exception cref="Exception">If http request fails.</exception>
+    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody)
+    {
+        return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, [], null, Array.Empty<string>());
+    }
+
+    /// <summary>
+    /// Execute an async REST Request basing on a JSON configuration file.
+    /// </summary>
+    /// <typeparam name="T">Data type attended from the request.</typeparam>
+    /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
+    /// <param name="requestType">Request type (GET, POST, PUT, DELETE).</param>
+    /// <param name="requestBody">Request body (if not null).</param>
     /// <param name="args">Optional arguments to ad to url</param>
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
     public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, params string[] args)
     {
-        return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, null, null, args);
+        return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, [], null, args);
     }
 
     /// <summary>
@@ -88,7 +103,7 @@ public class REST_RequestService : IREST_RequestService
     /// <exception cref="Exception">If http request fails.</exception>
     public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, double timeout, params string[] args)
     {
-        return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, null, timeout, args);
+        return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, [], timeout, args);
     }
 
     /// <summary>
@@ -108,7 +123,7 @@ public class REST_RequestService : IREST_RequestService
     {
         string url = GetBaseUrl(requestName);
 
-        if (parameters != null)
+        if (parameters != null && parameters.Count > 0)
         {
             foreach (KeyValuePair<string, string> param in parameters)
                 url = url.Replace($"{{{param.Key}}}", param.Value);
