@@ -1,4 +1,4 @@
-﻿namespace LusiUtilsLibrary.Backend.APIs_REST;
+﻿namespace LusiUtilsLibrary.Backend.Initialization;
 
 public class InitializeChecks
 {
