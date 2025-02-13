@@ -51,7 +51,7 @@ public class REST_RequestService : IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody)
+    public async Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody)
     {
         return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, [], null, Array.Empty<string>());
     }
@@ -67,7 +67,7 @@ public class REST_RequestService : IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, params string[] args)
+    public async Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, params string[] args)
     {
         return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, [], null, args);
     }
@@ -84,7 +84,7 @@ public class REST_RequestService : IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, Dictionary<string, string> parameters, params string[] args)
+    public async Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, Dictionary<string, string> parameters, params string[] args)
     {
         return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, parameters, null, args);
     }
@@ -101,7 +101,7 @@ public class REST_RequestService : IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, double timeout, params string[] args)
+    public async Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, double timeout, params string[] args)
     {
         return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, [], timeout, args);
     }
@@ -119,7 +119,7 @@ public class REST_RequestService : IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public async Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, Dictionary<string, string> parameters, double? timeout, params string[] args)
+    public async Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, Dictionary<string, string> parameters, double? timeout, params string[] args)
     {
         string url = GetBaseUrl(requestName);
 
@@ -139,7 +139,7 @@ public class REST_RequestService : IREST_RequestService
 
     #region private methods
 
-    private async Task<T> SendRequestAsync<T>(string url, RequestType requestType, object? requestBody, double? timeout = null)
+    private async Task<ApiResponse<T>> SendRequestAsync<T>(string url, RequestType requestType, object? requestBody, double? timeout = null)
     {
         if (timeout.HasValue)
             _httpClient.Timeout = TimeSpan.FromSeconds(timeout.Value);
@@ -183,7 +183,13 @@ public class REST_RequestService : IREST_RequestService
             PropertyNameCaseInsensitive = true,
         };
 
-        return JsonSerializer.Deserialize<T>(responseContent, options);
+        T data = JsonSerializer.Deserialize<T>(responseContent, options);
+
+        return new ApiResponse<T>
+        {
+            Data = data,
+            StatusCode = response.StatusCode,
+        };
     }
 
     #endregion

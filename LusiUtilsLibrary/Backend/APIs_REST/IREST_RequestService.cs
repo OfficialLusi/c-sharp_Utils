@@ -26,7 +26,7 @@ public interface IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, params string[] args);
+    public Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, params string[] args);
 
     /// <summary>
     /// Execute an async REST Request basing on a JSON configuration file.
@@ -40,7 +40,7 @@ public interface IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string> parameters, params string[] args);
+    public Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string> parameters, params string[] args);
 
     /// <summary>
     /// Execute an async REST Request basing on a JSON configuration file.
@@ -54,7 +54,7 @@ public interface IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, double timeout, params string[] args);
+    public Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, double timeout, params string[] args);
 
     /// <summary>
     /// Execute an async REST Request basing on a JSON configuration file.
@@ -69,5 +69,5 @@ public interface IREST_RequestService
     /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
     /// <exception cref="Exception">If http request fails.</exception>
-    public Task<T> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string> parameters, double? timeout, params string[] args);
+    public Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object requestBody, Dictionary<string, string> parameters, double? timeout, params string[] args);
 }
