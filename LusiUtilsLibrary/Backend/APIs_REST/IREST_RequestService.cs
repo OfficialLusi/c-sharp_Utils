@@ -14,7 +14,19 @@
 /// }
 /// </summary>
 public interface IREST_RequestService
-{
+{  
+    /// <summary>
+    /// Execute an async REST Request basing on a JSON configuration file.
+    /// </summary>
+    /// <typeparam name="T">Data type attended from the request.</typeparam>
+    /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
+    /// <param name="requestType">Request type (GET, POST, PUT, DELETE).</param>
+    /// <param name="requestBody">Request body (if not null).</param>
+    /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
+    /// <exception cref="Exception">If http request fails.</exception>
+    public Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody);
+
     /// <summary>
     /// Execute an async REST Request basing on a JSON configuration file.
     /// </summary>

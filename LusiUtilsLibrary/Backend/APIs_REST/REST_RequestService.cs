@@ -25,12 +25,8 @@ public class REST_RequestService : IREST_RequestService
     private readonly ILogger<REST_RequestService> _logger;
     #endregion
 
-    #region constructors
-    /// <summary>
-    /// REST_RequestService constructor
-    /// </summary>
-    /// <param name="logger">Logger interface of type REST_RequestService</param>
-    /// <param name="settingsPath">SettingsPath string for the communication settings file</param>
+    #region constructor
+
     public REST_RequestService(ILogger<REST_RequestService> logger, string settingsPath = "communicationsettings.json")
     {
         _logger = logger;
@@ -41,84 +37,26 @@ public class REST_RequestService : IREST_RequestService
 
     #region public methods
 
-    /// <summary>
-    /// Execute an async REST Request basing on a JSON configuration file.
-    /// </summary>
-    /// <typeparam name="T">Data type attended from the request.</typeparam>
-    /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
-    /// <param name="requestType">Request type (GET, POST, PUT, DELETE).</param>
-    /// <param name="requestBody">Request body (if not null).</param>
-    /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
-    /// <exception cref="Exception">If http request fails.</exception>
     public async Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody)
     {
         return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, [], null, Array.Empty<string>());
     }
 
-    /// <summary>
-    /// Execute an async REST Request basing on a JSON configuration file.
-    /// </summary>
-    /// <typeparam name="T">Data type attended from the request.</typeparam>
-    /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
-    /// <param name="requestType">Request type (GET, POST, PUT, DELETE).</param>
-    /// <param name="requestBody">Request body (if not null).</param>
-    /// <param name="args">Optional arguments to ad to url</param>
-    /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
-    /// <exception cref="Exception">If http request fails.</exception>
     public async Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, params string[] args)
     {
         return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, [], null, args);
     }
 
-    /// <summary>
-    /// Execute an async REST Request basing on a JSON configuration file.
-    /// </summary>
-    /// <typeparam name="T">Data type attended from the request.</typeparam>
-    /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
-    /// <param name="requestType">Request type (GET, POST, PUT, DELETE).</param>
-    /// <param name="requestBody">Request body (if not null).</param>
-    /// <param name="parameters">Parameters to add to url</param>
-    /// <param name="args">Optional arguments to ad to url</param>
-    /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
-    /// <exception cref="Exception">If http request fails.</exception>
     public async Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, Dictionary<string, string> parameters, params string[] args)
     {
         return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, parameters, null, args);
     }
 
-    /// <summary>
-    /// Execute an async REST Request basing on a JSON configuration file.
-    /// </summary>
-    /// <typeparam name="T">Data type attended from the request.</typeparam>
-    /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
-    /// <param name="requestType">Request type (GET, POST, PUT, DELETE).</param>
-    /// <param name="requestBody">Request body (if not null).</param>
-    /// <param name="timeout">Timeout for the request</param>
-    /// <param name="args">Optional arguments to ad to url</param>
-    /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
-    /// <exception cref="Exception">If http request fails.</exception>
     public async Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, double timeout, params string[] args)
     {
         return await ExecuteRequestAsync<T>(requestName, requestType, requestBody, [], timeout, args);
     }
 
-    /// <summary>
-    /// Execute an async REST Request basing on a JSON configuration file.
-    /// </summary>
-    /// <typeparam name="T">Data type attended from the request.</typeparam>
-    /// <param name="requestName">Request name searched in <c>communicationsettings.json</c>(standard) or another file name</param>
-    /// <param name="requestType">Request type (GET, POST, PUT, DELETE).</param>
-    /// <param name="requestBody">Request body (if not null).</param>
-    /// <param name="parameters">Parameters to add to url</param>
-    /// <param name="timeout">Timeout for the request</param>
-    /// <param name="args">Optional arguments to ad to url</param>
-    /// <returns>Request result deserialized as <typeparamref name="T"/>.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">If request name is not in communication file.</exception>
-    /// <exception cref="Exception">If http request fails.</exception>
     public async Task<ApiResponse<T>> ExecuteRequestAsync<T>(string requestName, RequestType requestType, object? requestBody, Dictionary<string, string> parameters, double? timeout, params string[] args)
     {
         string url = GetBaseUrl(requestName);
