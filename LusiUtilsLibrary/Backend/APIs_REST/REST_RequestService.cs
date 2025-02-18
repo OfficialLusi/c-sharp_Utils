@@ -116,6 +116,15 @@ public class REST_RequestService : IREST_RequestService
 
         string responseContent = await response.Content.ReadAsStringAsync();
 
+        if (string.IsNullOrWhiteSpace(responseContent))
+        {
+            return new ApiResponse<T>
+            {
+                Data = default,
+                StatusCode = response.StatusCode,
+            };
+        }
+
         JsonSerializerOptions options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
