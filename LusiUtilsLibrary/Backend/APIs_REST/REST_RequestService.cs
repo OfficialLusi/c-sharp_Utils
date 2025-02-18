@@ -82,7 +82,7 @@ public class REST_RequestService : IREST_RequestService
         if (timeout.HasValue)
             _httpClient.Timeout = TimeSpan.FromSeconds(timeout.Value);
 
-        HttpResponseMessage response = null;
+        HttpResponseMessage response;
 
         switch (requestType)
         {
@@ -141,10 +141,11 @@ public class REST_RequestService : IREST_RequestService
         return JsonSerializer.Deserialize<dynamic>(File.ReadAllText(settingsPath));
     }
 
-    private static HttpContent? CreateHttpContent(object requestBody)
+    private static StringContent? CreateHttpContent(object requestBody)
     {
+        string content = JsonSerializer.Serialize(requestBody);
         return requestBody != null
-            ? new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json")
+            ? new StringContent(content, Encoding.UTF8, "application/json")
             : null;
     }
 
