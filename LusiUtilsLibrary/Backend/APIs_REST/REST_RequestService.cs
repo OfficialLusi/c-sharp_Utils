@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 
@@ -113,6 +114,15 @@ public class REST_RequestService : IREST_RequestService
         };
 
         response.EnsureSuccessStatusCode();
+
+        if(response.StatusCode != HttpStatusCode.OK)
+        {
+            return new ApiResponse<T>
+            {
+                Data = default,
+                StatusCode = response.StatusCode,
+            };
+        }
 
         string responseContent = await response.Content.ReadAsStringAsync();
 
