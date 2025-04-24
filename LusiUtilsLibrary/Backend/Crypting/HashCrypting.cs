@@ -22,7 +22,7 @@ namespace LusiUtilsLibrary.Backend.Crypting
             }
         }
 
-        public static byte[] CheckHash(string password, byte[] salt)
+        public static byte[] CalculateHash(string password, byte[] salt)
         {
             byte[] hash = HashCrypting.HashPassword(password, salt);
 
