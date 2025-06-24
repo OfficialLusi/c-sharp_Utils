@@ -7,7 +7,7 @@ Every new version:
 
 - git checkout main
 - git pull
-- git tag v1.0.1
-- git push origin v1.0.1
+- git tag 1.0.1
+- git push origin 1.0.1
 
  # This trigger the workflow, change the version number and publish the package
