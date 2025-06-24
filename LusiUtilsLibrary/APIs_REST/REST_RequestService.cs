@@ -3,9 +3,10 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 
-namespace LusiUtilsLibrary.Backend.APIs_REST;
+namespace LusiUtilsLibrary.APIs_REST;
 
 /// <summary>
+/// RequestService Class
 /// Passing the file name for the correct configuration of apis
 /// {
 ///   "httpconfig": {
@@ -115,7 +116,7 @@ public class REST_RequestService : IREST_RequestService
 
         response.EnsureSuccessStatusCode();
 
-        if(response.StatusCode != HttpStatusCode.OK)
+        if (response.StatusCode != HttpStatusCode.OK)
         {
             return new ApiResponse<T>
             {

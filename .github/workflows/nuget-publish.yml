@@ -1,0 +1,35 @@
+name: Publish NuGet package
+
+on:
+  push:
+    branches:
+      - main  # every merge on main branch
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'  # target dotnet version
+
+    - name: Set version from tag
+      id: version
+      run: |
+        TAG=${GITHUB_REF#refs/tags/}
+        echo "##[set-output name=version;]${TAG:-1.0.0-preview}"
+    
+    - name: Pack NuGet package
+      run: |
+        dotnet pack ./LusiUtilsLibrary.csproj -c Release -p:PackageVersion=${{ steps.version.outputs.version }}
+
+    - name: Publish to GitHub Packages
+      run: |
+        dotnet nuget push ./bin/Release/*.nupkg \
+          --api-key ${{ secrets.GITHUB_TOKEN }} \
+          --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"

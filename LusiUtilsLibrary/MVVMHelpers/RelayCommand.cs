@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace LusiUtilsLibrary.Frontend.MVVMHelpers;
+namespace LusiUtilsLibrary.MVVMHelpers;
 
 public class RelayCommand : ICommand
 {
@@ -36,15 +36,9 @@ public class RelayCommand<T> : ICommand
 
     public event EventHandler CanExecuteChanged;
 
-    public bool CanExecute(object parameter)
-    {
-        return _canExecute == null || _canExecute((T)parameter);
-    }
+    public bool CanExecute(object parameter) => _canExecute == null || _canExecute((T)parameter);
 
-    public async void Execute(object parameter)
-    {
-        await _execute((T)parameter);
-    }
+    public async void Execute(object parameter) => await _execute((T)parameter);
 
     public void RaiseCanExecuteChanged()
         => CanExecuteChanged?.Invoke(this, EventArgs.Empty);

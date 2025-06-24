@@ -1,4 +1,4 @@
-﻿namespace LusiUtilsLibrary.Backend.APIs_REST;
+﻿namespace LusiUtilsLibrary.APIs_REST;
 
 /// <summary>
 /// Passing the file name for the correct configuration of apis
@@ -14,7 +14,7 @@
 /// }
 /// </summary>
 public interface IREST_RequestService
-{  
+{
     /// <summary>
     /// Execute an async REST Request basing on a JSON configuration file.
     /// </summary>
