@@ -3,7 +3,7 @@ name: Publish NuGet package
 on:
   push:
     tags:
-      - 'v*'   # pusblish only if there is a tag
+      - '*'   # pusblish only if there is a tag
 
 jobs:
   publish:
