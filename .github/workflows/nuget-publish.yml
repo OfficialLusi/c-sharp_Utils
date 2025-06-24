@@ -2,36 +2,33 @@ name: Publish NuGet package
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'   # pusblish only if there is a tag
 
 jobs:
   publish:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Set version from tag
-      id: version
-      run: |
-        TAG=${GITHUB_REF#refs/tags/}
-        echo "version=${TAG:-1.0.0-preview}" >> $GITHUB_OUTPUT
+      - name: Set version from tag
+        id: version
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "version=${TAG}" >> $GITHUB_OUTPUT
 
-    - name: Pack NuGet package
-      run: |
-        dotnet pack ./LusiUtilsLibrary/LusiUtilsLibrary.csproj \
-          -c Release \
-          -p:PackageVersion=${{ steps.version.outputs.version }}
+      - name: Pack NuGet package
+        run: |
+          dotnet pack ./LusiUtilsLibrary/LusiUtilsLibrary.csproj \
+            -c Release \
+            -p:PackageVersion=${{ steps.version.outputs.version }}
 
-    - name: Publish to GitHub Packages
-      run: |
-        dotnet nuget push ./LusiUtilsLibrary/bin/Release/*.nupkg \
-          --api-key ${{ secrets.GITHUB_TOKEN }} \
-          --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+      - name: Publish to GitHub Packages
+        run: |
+          dotnet nuget push ./LusiUtilsLibrary/bin/Release/*.nupkg \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
